@@ -10,37 +10,56 @@ var App = {
 
     },
 
-    dependenciesPath: "",
     /**
      * File list to load
-     * this list should be according to folder struct
-     * for a better organization
      */
     dependencies: {
-        Core: [
-            "Controller.js"
-        ]
+        Config: "Core/Config.js",
+        Controller: "Core/Controller.js"
     },
 
     /**
      * Loads dependencie files into DOM
      * @param Object dependencies 
      */
-    loadDependencies: function(dependencies) {
-        for (var key in dependencies) {
-            if (typeof(key) === "object") {
-                this.loadDependencies(dependencies[key]);
+    loadDependencies: function() {
+        for (var key in this.dependencies) {
+            var script = document.createElement('script');
+            script.src = this.dependencies[key];
+            $("body").append(script);
+        }
+    },
+
+    routing: function() {
+        var url = window.location.href;
+        var path = {
+            controller: null,
+            method: null,
+            value: null
+        };
+
+        //load routes and redirect for defined routes
+
+        if (url.indexOf("=") === -1) {
+
+        } else {
+            if (url.indexOf("?") === -1) {
+
             } else {
-                if (typeof(dependencies[key]) === "object") {
-                    this.loadDependencies(dependencies[key]);
+                if (url.indexOf("#") === -1) {
+                    //window.location.assign();
                 } else {
-                    var body = document.getElementsByTagName('body')[0];
-                    var add = "<script src='" + dependencies[key] + "'></script>"
-                    body.innerHTML = body.innerHTML + add;
+
                 }
             }
         }
+    },
+
+    start: function() {
+        this.loadDependencies();
+        this.routing();
+        console.log(Config.base_url);
     }
 };
 
-App.loadDependencies(App.dependencies);
+App.start();
