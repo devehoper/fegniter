@@ -19,14 +19,22 @@ var App = {
     },
 
     /**
+     * Loads a script by a given path
+     * @param String path 
+     */
+    loadScript: function(path) {
+        var script = document.createElement('script');
+        script.src = path;
+        $("body").append(script);
+    },
+
+    /**
      * Loads dependencie files into DOM
      * @param Object dependencies 
      */
     loadDependencies: function() {
         for (var key in this.dependencies) {
-            var script = document.createElement('script');
-            script.src = this.dependencies[key];
-            $("body").append(script);
+            this.loadScript(this.dependencies[key]);
         }
     },
 
@@ -55,10 +63,35 @@ var App = {
         }
     },
 
+    loadController: function(path) {
+        var ext = path.indexOf(".js") === -1 ? ".js" : "";
+        this.loadScript(path + ext);
+        console.warn(path + ext);
+    },
+
+    createPromise: function(before, after) {
+        var p = new Promise(function(resolve, reject) {
+            $("#spinner").show();
+            before();
+        });
+
+        p.then(function() {
+            after();
+            $("#spinner").hide();
+        });
+    },
+
     start: function() {
-        this.loadDependencies();
-        this.routing();
-        console.log(Config.base_url);
+        var scope = this;
+        this.createPromise(function() {
+            scope.loadDependencies();
+        }, function() {
+            scope.routing();
+            scope.loadController(Config.controllers_path + Config.default_controller)
+
+        });
+
+
     }
 };
 
