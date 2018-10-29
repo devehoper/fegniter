@@ -10,6 +10,7 @@ var App = {
 
     },
 
+
     /**
      * File list to load
      */
@@ -23,6 +24,7 @@ var App = {
      * @param String path 
      */
     loadScript: function(path) {
+        console.warn(path);
         var script = document.createElement('script');
         script.src = path;
         $("body").append(script);
@@ -62,11 +64,18 @@ var App = {
             }
         }
     },
+    /**
+     * If App has Controller returns the controller otherwise returns null
+     * @param String name 
+     * @return null|| Object 
+     */
+    getController: function(name) {
+        return typeof(this.Controllers[name]) === "undefined" ? null : this.Controllers.name;
+    },
 
-    loadController: function(path) {
-        var ext = path.indexOf(".js") === -1 ? ".js" : "";
-        this.loadScript(path + ext);
-        console.warn(path + ext);
+    loadController: function(path, name) {
+        var ext = name.indexOf(".js") === -1 ? ".js" : "";
+        this.loadScript(path + name + ext);
     },
 
     createPromise: function(before, after) {
@@ -83,15 +92,18 @@ var App = {
 
     start: function() {
         var scope = this;
-        this.createPromise(function() {
+        var p = new Promise(function(resolve, reject) {
             scope.loadDependencies();
-        }, function() {
             scope.routing();
-            scope.loadController(Config.controllers_path + Config.default_controller)
-
+            scope.loadController(Config.controllers_path, Config.default_controller);
+            resolve("Loaded all dependencies!");
         });
-
-
+        p.then(function(result) {
+            console.warn(result);
+            var controller = scope.getController(Config.default_controller);
+            //controller === null ? "" : controller.addToDom();
+            scope.Controllers[Config.default_controller].addToDom();
+        });
     }
 };
 
