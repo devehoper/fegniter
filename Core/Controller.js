@@ -5,14 +5,19 @@ var Controller = function(name) {
         $("#Main").append("<div id='" + this.name + "'></div>");
     }
 
-    this.loadView = function(path) {
+    this.loadView = function(fileName, destination) {
+        $(destination).load(Config.views_path + fileName + ".html");
+        App.Views[fileName] = $(destination);
+    }
 
+    this.loadModel = function(fileName) {
+        App.loadScript(Config.models_path + fileName + ".js");
     }
 
 
 
-
-    App.Controllers[name] = this;
+    // Add controller to App controllers
+    typeof(App.Controllers.name) === "undefined" ? App.Controllers[name] = this: "";
 }
 
 //Private methods

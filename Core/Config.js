@@ -1,5 +1,5 @@
 var Config = {
-    base_url: "file:///home/devehoper/Desktop/repositorios/feigniter/index.html",
+    base_url: "https://cld.pt/dl/download/afabc696-dc5b-4c56-b317-852a181137a7/repositorios/feigniter/index.html",
     controllers_path: "Controller/",
     models_path: "Model/",
     views_path: "View/",
@@ -10,6 +10,6 @@ var Config = {
      */
     routes: {
         //Controller:"Method"
-        Home: "index()"
+        Home: ["teste", "value"]
     }
 }
