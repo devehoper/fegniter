@@ -2,6 +2,7 @@ var App = {
     Controllers: {},
     Models: {},
     Views: {},
+    debbug: [],
 
     /**
      * File list to load
@@ -9,7 +10,8 @@ var App = {
     dependencies: {
         Config: "Core/Config.js",
         Controller: "Core/Controller.js",
-        Model: "Core/Model.js"
+        Model: "Core/Model.js",
+        Main_utilities: "Utilities/Main.js"
     },
 
     request: function(data) {
@@ -151,18 +153,16 @@ var App = {
             resolve("Loaded all dependencies!");
         });
         p.then(function(result) {
-            console.warn(result);
             var controller = scope.getController(Config.default_controller);
             //controller === null ? "" : controller.addToDom();
             scope.Controllers[Config.default_controller].addToDom();
             scope.routing();
+            window.onhashchange = function(e) {
+                console.log("LOCATION CHANGED");
+                App.routing();
+            };
         });
     }
 };
 
 App.start();
-
-window.onhashchange = function(e) {
-    console.log("LOCATION CHANGED");
-    App.routing();
-};

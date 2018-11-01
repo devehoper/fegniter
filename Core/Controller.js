@@ -10,17 +10,14 @@ var Controller = function(name) {
         App.Views[fileName] = $(destination);
     }
 
+    this.loadApp = function(fileName, destination) {
+        $(destination).load(Config.apps_path + fileName + "/" + filename + ".html");
+    }
+
     this.loadModel = function(fileName) {
         App.loadScript(Config.models_path + fileName + ".js");
     }
 
-
-
     // Add controller to App controllers
     typeof(App.Controllers.name) === "undefined" ? App.Controllers[name] = this: "";
-}
-
-//Private methods
-Controller.prototype.private = function() {
-    alert("Private method");
 }
